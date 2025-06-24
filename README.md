@@ -1,9 +1,7 @@
-**🚀 AWS Multi-Region E-Commerce Microservices Deployment
-**
+🚀 AWS Multi-Region E-Commerce Microservices Deployment
 A full-stack, production-grade e-commerce platform deployed across multiple AWS regions. Built with Python Flask (backend), ReactJS (frontend), and powered by Amazon EKS, this solution is fully automated using CloudFormation, Terraform, and a complete CI/CD pipeline (CodePipeline, CodeBuild, ECR). It ensures high availability, auto-healing, and DNS failover with Route 53, all while following AWS best practices for security, scalability, and observability.
 
-**📘 Project Overview
-**
+📘 Project Overview
 This capstone project demonstrates:
 
 Highly available, multi-region architecture
@@ -18,27 +16,32 @@ DNS health-based failover using Route 53
 
 Infrastructure as Code (IaC) using CloudFormation & Terraform
 
-**🧱 Tech Stack
-**
+🧱 Tech Stack
 Frontend: ReactJS
+
 Backend: Python Flask
+
 Database: Amazon RDS (MySQL, Multi-AZ)
+
 Orchestration: Amazon EKS (Fargate/EC2)
+
 Infra as Code: CloudFormation (us-east-1), Terraform (us-west-2)
+
 CI/CD: CodePipeline, CodeBuild, Amazon ECR
+
 Monitoring: CloudWatch, SNS
 
-**🌐 Multi-Region Deployment Strategy
-**
+🌐 Multi-Region Deployment Strategy
 us-east-1 → Primary Region (CloudFormation)
 
-us-west-2 → Disaster Recovery (Terraform)
+us-west-2 → Disaster Recovery (DR) (Terraform)
 
 Route 53 handles DNS-based health checks and automatic failover
 
-**📐 Architecture Diagram
-**
-
+📐 Architecture Diagram
+scss
+Copy
+Edit
                     🌐 Internet
                          │
                      [ Route 53 ]
@@ -52,10 +55,9 @@ Route 53 handles DNS-based health checks and automatic failover
  [ Flask Microservices ]     [ Flask Microservices ]
               │                         │
  [ RDS MySQL (Multi-AZ) ]    [ RDS MySQL (Multi-AZ) ]
+📍 Region 1: CloudFormation Deployment (us-east-1)
+Components:
 
-
-**📍 Region 1: CloudFormation Deployment (us-east-1)
-Components:**
 Custom VPC (public/private subnets)
 
 Amazon EKS with managed node groups
@@ -71,25 +73,28 @@ NACLs, Security Groups
 CloudWatch logging and metrics
 
 Deploy Options:
+
 Use vpc-eks-rds.yaml CloudFormation template
 
 Or deploy via CodePipeline from GitHub
 
-**📍 Region 2: Terraform Deployment (us-west-2)
-Modules:**
+📍 Region 2: Terraform Deployment (us-west-2)
+Modules:
 
 vpc.tf: Networking setup
 
 eks.tf: EKS cluster and node group
 
 rds.tf: Private RDS MySQL setup
-**
-Deploy Steps:**
 
+Deploy Steps:
+
+bash
+Copy
+Edit
 cd region-2-terraform
 terraform init
 terraform apply
-
 🌎 DNS Failover via Route 53
 A (Alias) record for us-east-1 → PRIMARY ✅
 
@@ -97,8 +102,9 @@ A (Alias) record for us-west-2 → SECONDARY ✅
 
 Health checks monitor the ALB in us-east-1 and redirect traffic to us-west-2 on failure
 
-**📀 CI/CD Pipeline**
+📀 CI/CD Pipeline
 Tools:
+
 CodePipeline: Orchestrates the entire flow
 
 CodeBuild: Builds Docker images and applies Kubernetes manifests
@@ -108,10 +114,14 @@ ECR: Stores built images
 S3: (Optional) Stores artifacts
 
 Flow:
+
 GitHub → CodeBuild → ECR → EKS (kubectl apply)
 
 Sample buildspec.yml:
 
+yaml
+Copy
+Edit
 version: 0.2
 
 phases:
@@ -136,9 +146,9 @@ phases:
 artifacts:
   files:
     - k8s/*
-**📊 Monitoring & Logging
+📊 Monitoring & Logging
 Metrics Tracked: EKS CPU/Memory usage
-**
+
 Threshold Example: CPU > 80% → SNS Email alert
 
 Logging: CloudWatch Agent
@@ -154,7 +164,7 @@ Alerting: SNS Notifications
 
 ✅ All secrets stored securely in AWS Secrets Manager
 
-✅ NACLs and SGs strictly configured
+✅ NACLs and Security Groups strictly configured
 
 ✅ ALB handles Ingress securely
 

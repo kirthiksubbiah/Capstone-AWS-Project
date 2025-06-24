@@ -1,20 +1,24 @@
-🚀 AWS Multi-Region E-Commerce Microservices Deployment
-📑 Table of Contents
+**🚀 AWS Multi-Region E-Commerce Microservices Deployment**
+
+A full-stack, multi-region e-commerce platform built with Python Flask, ReactJS, and deployed to Amazon EKS using CloudFormation, Terraform, and a complete CI/CD pipeline with CodePipeline, CodeBuild, and ECR. It features high availability, automatic DNS failover with Route 53, and secure, scalable infrastructure using AWS best practices.
+**
+📚 Table of Contents
+**
 📘 Project Overview
 
 🧱 Tech Stack
 
 🌐 Multi-Region Deployment Strategy
 
-📐 Infrastructure Architecture
+📐 Architecture Diagram
 
-📍 Region 1 Deployment (us-east-1) – CloudFormation
+📍 Region 1: CloudFormation Deployment (us-east-1)
 
-📍 Region 2 Deployment (us-west-2) – Terraform
+📍 Region 2: Terraform Deployment (us-west-2)
 
-🌎 DNS Failover with Route 53
+🌎 DNS Failover via Route 53
 
-🔄 CI/CD Pipeline with CodePipeline + CodeBuild
+📀 CI/CD Pipeline
 
 📊 Monitoring & Logging
 
@@ -25,103 +29,189 @@
 👨‍💻 Author
 
 💻 Useful Commands
+**
+1. 📘 Project Overview**
 
-1. Project Overview
-This capstone project delivers a robust multi-tier, multi-region e-commerce microservices application hosted on Amazon EKS with a managed MySQL RDS backend, global Route 53 DNS failover, and CI/CD automation using AWS CodePipeline and CodeBuild.
+This capstone project showcases a highly available, resilient, and auto-healing deployment of a microservices-based e-commerce application using:
 
-2. Tech Stack
-Layer	Technology
-Frontend	ReactJS
-Backend	Python Flask
-Database	Amazon RDS MySQL (Multi-AZ)
-Orchestration	Amazon EKS (Fargate/EC2 nodes)
-Infrastructure	CloudFormation (us-east-1), Terraform (us-west-2)
-CI/CD	CodePipeline, CodeBuild, ECR
-Monitoring	Amazon CloudWatch, SNS
+Multi-region Kubernetes clusters (EKS)
 
-3. Multi-Region Deployment Strategy
-Region	Tools Used	Purpose
-us-east-1	CloudFormation	Primary Region
-us-west-2	Terraform	Secondary (Failover) DR
+Centralized database via Amazon RDS (MySQL)
 
-4. Infrastructure Architecture
-scss
-Copy
-Edit
-                        🌐 Internet
-                             │
-                         [ Route 53 ]
-                      ↙                 ↘
-     📍 us-east-1 (CloudFormation)      📍 us-west-2 (Terraform)
-     ---------------------------       ----------------------------
-             [ ALB ]                            [ ALB ]
-                │                                   │
-             [ EKS ]                            [ EKS ]
-                │                                   │
-       [ Flask Microservices ]           [ Flask Microservices ]
-                │                                   │
-       [ RDS MySQL (Multi-AZ) ]          [ RDS MySQL (Multi-AZ) ]
-5. Region 1 Deployment (us-east-1) – CloudFormation
-Components:
-Custom VPC with private/public subnets
+Automatic failover via Route 53 DNS
 
-EKS Cluster with managed node group
+Fully automated CI/CD pipeline
 
-Amazon RDS with Multi-AZ MySQL
+**2. 🧱 Tech Stack**
 
-IAM Roles for EKS and EC2
+Layer
 
-Security Groups, NACLs, ALB
+Technology
 
-CloudWatch integration for logs and alerts
+Frontend
 
-Deployment:
-Deploy using CloudFormation Stack: vpc-eks-rds.yaml
+ReactJS
 
-Or automate via CodePipeline pointing to the GitHub repo:
-🔗 ecommerce-system
+Backend
 
-6. Region 2 Deployment (us-west-2) – Terraform
-Modules:
-vpc.tf – Networking
+Python Flask
 
-eks.tf – EKS cluster, node groups, IAM
+Database
 
-rds.tf – Amazon RDS with security groups
+Amazon RDS (MySQL, Multi-AZ)
 
-Deployment Steps:
-bash
-Copy
-Edit
+Orchestration
+
+Amazon EKS (Fargate/EC2 nodes)
+
+Infra as Code
+
+CloudFormation (us-east-1), Terraform (us-west-2)
+
+CI/CD
+
+CodePipeline, CodeBuild, ECR
+
+Monitoring
+
+CloudWatch, SNS
+
+**3. 🌐 Multi-Region Deployment Strategy**
+
+Region
+
+Tool Used
+
+Purpose
+
+us-east-1
+
+CloudFormation
+
+Primary region
+
+us-west-2
+
+Terraform
+
+Disaster recovery (DR)
+
+✅ Failover handled automatically via Route 53 health checks.
+
+**4. 📐 Architecture Diagram**
+
+                       🌐 Internet
+                            │
+                        [ Route 53 ]
+                     ↙                 ↘
+      📍 us-east-1 (Primary)       📍 us-west-2 (Failover)
+      ---------------------       ------------------------
+            [ ALB ]                     [ ALB ]
+               │                           │
+           [ EKS ]                      [ EKS ]
+               │                           │
+ [ Flask Microservices ]    [ Flask Microservices ]
+               │                           │
+ [ RDS MySQL (Multi-AZ) ]   [ RDS MySQL (Multi-AZ) ]
+
+**5. 📍 Region 1: CloudFormation Deployment (us-east-1)**
+
+🧩 Components:
+
+VPC with public/private subnets
+
+EKS cluster with managed node groups
+
+Multi-AZ Amazon RDS (MySQL)
+
+ALB + NACLs + Security Groups
+
+IAM roles for EKS, EC2, CodeBuild
+
+CloudWatch integration
+
+⚙️ Deployment Options:
+
+Use CloudFormation template: vpc-eks-rds.yaml
+
+Or deploy via CodePipeline (GitHub source)🔗 GitHub Repo – CloudFormation
+
+**6. 📍 Region 2: Terraform Deployment (us-west-2)**
+
+📂 Modules:
+
+vpc.tf: Networking & subnets
+
+eks.tf: EKS cluster, node group, IAM roles
+
+rds.tf: MySQL instance (private subnet)
+
+🛠️ Deploy:
+
 cd region-2-terraform
 terraform init
 terraform apply
-🔗 Terraform Repo
 
-7. DNS Failover with Route 53
-Record Type	Region	Role	Health Check
-A (Alias)	us-east-1	PRIMARY	Enabled
-A (Alias)	us-west-2	SECONDARY	Not Required
+🔗 GitHub Repo – Terraform
 
-✅ If the primary region becomes unhealthy, Route 53 automatically redirects traffic to the backup region.
+**7. 🌎 DNS Failover via Route 53**
 
-8. CI/CD Pipeline with CodePipeline + CodeBuild
-Tools:
-Service	Role
-CodePipeline	End-to-end deployment
-CodeBuild	Docker build, SonarQube scan, kubectl apply
-ECR	Docker image storage
-S3	(Optional) Artifact store
+Record Type
 
-Structure:
-scss
-Copy
-Edit
-GitHub ───▶ CodeBuild ───▶ ECR ───▶ EKS (kubectl)
-buildspec.yml (Simplified):
-yaml
-Copy
-Edit
+Region
+
+Role
+
+Health Check
+
+A (Alias)
+
+us-east-1
+
+PRIMARY
+
+✅ Enabled
+
+A (Alias)
+
+us-west-2
+
+SECONDARY
+
+❌ Not Required
+
+✅ Automatically redirects to secondary if primary region ALB is unhealthy.
+
+**8. 📀 CI/CD Pipeline**
+
+🧰 Tools:
+
+Service
+
+Purpose
+
+CodePipeline
+
+End-to-end automation
+
+CodeBuild
+
+Build, test, deploy to EKS
+
+Amazon ECR
+
+Docker image registry
+
+S3
+
+Optional – store build artifacts
+
+🔁 Flow:
+
+GitHub ──▶ CodeBuild ──▶ ECR ──▶ EKS (kubectl apply)
+
+✅ Sample buildspec.yml:
+
 version: 0.2
 phases:
   pre_build:
@@ -142,53 +232,69 @@ phases:
 artifacts:
   files:
     - k8s/*
-✅ Fixes:
+**
+9. 📊 Monitoring & Logging
+**
+Metric
 
-Made SonarQube analysis optional to avoid blocking builds
+Threshold
 
-Corrected YAML formatting and Docker image validation
+Action
 
-9. Monitoring & Logging
-Metric	Threshold	Action
-RDS CPUUtilization	> 70%	SNS Alert
-EKS Pod CPUUtilization	> 80%	SNS Alert
+RDS CPU Utilization
 
-✅ Integrated with CloudWatch Logs and SNS Email
-✅ Container logs viewable with kubectl logs
+> 70%
 
-10. Security Best Practices
-🔒 RDS not publicly accessible
+SNS Email
 
-🔑 IAM roles with least privilege
+EKS Pod CPU Utilization
 
-🧪 Secrets managed via AWS Secrets Manager
+> 80%
 
-🔐 Security Groups & NACLs restrict public access
+SNS Email
 
-11. Future Enhancements
-🔁 Add Blue-Green or Canary deployment using CodeDeploy or Argo Rollouts
+✅ Logs collected via CloudWatch Agent✅ Alerts delivered via SNS Notifications
+**
+10. 🔐 Security Best Practices
+**
+🔒 RDS in private subnets
 
-📈 Integrate Prometheus + Grafana for real-time metrics
+🔐 Restrictive Security Groups & NACLs
 
-🔐 Add AWS WAF and AWS Shield on ALB
+🔑 IAM Roles follow least privilege principle
 
-🐳 Use Helm charts to deploy K8s microservices
+🧺 Secrets stored in Secrets Manager
 
-12. Author
-👨‍💻 Kirthik Subbiah
-🔗 GitHub: @kirthiksubbiah
-🌐 Project Demo: http://kirthiksubbiah.com
+🛡️ Ingress protected by ALB
 
-13. Useful Commands
-bash
-Copy
-Edit
+**11. 📈 Future Enhancements**
+
+✅ Blue-Green/Canary Deployments with Argo Rollouts
+
+📊 Add Prometheus + Grafana for observability
+
+🚡 Enable AWS WAF + Shield on ALB
+
+🐳 Use Helm charts to deploy microservices
+
+☁️ Support for multi-cloud Kubernetes (GKE, AKS)
+
+**12. 👨‍💻 Author**
+
+Kirthik Subbiah🔗 GitHub: @kirthiksubbiah🌐 Website: kirthiksubbiah.com
+
+**13. 💻 Useful Commands**
+
 # Connect kubectl to EKS cluster
 aws eks update-kubeconfig --region <region> --name <cluster-name>
 
-# Check nodes and services
+# View cluster resources
 kubectl get nodes
 kubectl get svc
 
-# View logs for app pods
+# View logs for pods
 kubectl logs -l app=myapp
+
+💡 This project reflects best practices in AWS DevOps, multi-region cloud architecture, Kubernetes orchestration, and automated deployments for enterprise-grade applications.
+
+

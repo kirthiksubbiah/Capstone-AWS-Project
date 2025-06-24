@@ -110,9 +110,9 @@ Disaster recovery (DR)
                │                           │
            [ EKS ]                      [ EKS ]
                │                           │
- [ Flask Microservices ]    [ Flask Microservices ]
+  [ Flask Microservices ]        [ Flask Microservices ]
                │                           │
- [ RDS MySQL (Multi-AZ) ]   [ RDS MySQL (Multi-AZ) ]
+  [ RDS MySQL (Multi-AZ) ]       [ RDS MySQL (Multi-AZ) ]
 
 **5. 📍 Region 1: CloudFormation Deployment (us-east-1)**
 
@@ -156,29 +156,12 @@ terraform apply
 
 **7. 🌎 DNS Failover via Route 53**
 
-Record Type
+Record Type     Region            Role          Health Check
 
-Region
+A (Alias)     us-east-1          PRIMARY         ✅ Enabled
 
-Role
+A (Alias)     us-west-2         SECONDARY        ✅ Enabled
 
-Health Check
-
-A (Alias)
-
-us-east-1
-
-PRIMARY
-
-✅ Enabled
-
-A (Alias)
-
-us-west-2
-
-SECONDARY
-
-❌ Not Required
 
 ✅ Automatically redirects to secondary if primary region ALB is unhealthy.
 
@@ -235,23 +218,9 @@ artifacts:
 **
 9. 📊 Monitoring & Logging
 **
-Metric
+Metric                     Threshold      Action
 
-Threshold
-
-Action
-
-RDS CPU Utilization
-
-> 70%
-
-SNS Email
-
-EKS Pod CPU Utilization
-
-> 80%
-
-SNS Email
+EKS Pod CPU Utilization     > 80%        SNS Email
 
 ✅ Logs collected via CloudWatch Agent✅ Alerts delivered via SNS Notifications
 **

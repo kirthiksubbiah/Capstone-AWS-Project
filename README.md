@@ -30,7 +30,7 @@ This capstone project demonstrates a complete **multi-tier, multi-region deploym
 
 - **Tech Stack**:
   - Frontend: ReactJS
-  - Backend: Spring Boot Microservices
+  - Backend: python
   - Database: Amazon RDS (MySQL)
   - Infra Tools: AWS CloudFormation, Terraform
   - Deployment: Amazon EKS
@@ -41,28 +41,30 @@ This capstone project demonstrates a complete **multi-tier, multi-region deploym
 
 | Goal             | Strategy                                                            |
 |------------------|---------------------------------------------------------------------|
-| High Availability| Multi-AZ subnets, Multi-region with Route 53 Failover              |
-| Fault Tolerance  | Redundant node groups, health-based DNS routing                    |
+| High Availability| Multi-AZ subnets, Multi-region with Route 53 Failover               |
+| Fault Tolerance  | Redundant node groups, health-based DNS routing                     |
 | Scalability      | EKS Cluster Auto Scaling                                            |
-| DR Readiness     | Active/Passive Multi-Region setup                                  |
+| DR Readiness     | Active/Passive Multi-Region setup                                   |
 
 ---
 
 ## 4. Overall Architecture
 
-                     🌐 Internet
-                          |
-                     [ Route 53 ]
-                  /                  \
- 📍 us-east-1 (CloudFormation)    📍 us-west-2 (Terraform)
- --------------------------       ---------------------------
-          [ ALB ]                         [ ALB ]
-             |                               |
-          [ EKS ]                         [ EKS ]
-             |                               |
- [ Spring Boot Microservices ]  [ Spring Boot Microservices ]
-             |                               |
-     [ RDS MySQL DB ]                 [ RDS MySQL DB ]
+                          🌐 Internet
+                               |
+                           [ Route 53 ]
+                      /                   \
+    📍 us-east-1 (CloudFormation)      📍 us-west-2 (Terraform)
+    ---------------------------       ----------------------------
+             [ ALB ]                            [ ALB ]
+                |                                   |
+             [ EKS ]                            [ EKS ]
+                |                                   |
+      [ Flask Microservices ]           [ Flask Microservices ]
+                |                                   |
+       [ RDS MySQL Database ]           [ RDS MySQL Database ]
+             (Multi-AZ)                        (Multi-AZ)
+
 
 
 ---
@@ -118,7 +120,7 @@ S3 (Optional)	Artifact storage
 🛠 Pipeline Structure
 
 ┌────────────┐       ┌────────────┐       ┌──────────────┐
-│  GitHub    │ ───▶  │ CodeBuild  │ ───▶  │ EKS/K8s Deploy│
+│  GitHub    │ ───▶ │  CodeBuild │ ───▶  │EKS/K8s Deploy│
 └────────────┘       └────────────┘       └──────────────┘
 📄 Sample buildspec.yml
 

@@ -28,7 +28,9 @@ This project is a cloud-native, multi-region **e-commerce application** built us
 | DNS Failover     | Amazon Route 53                    | Health checks and multi-region failover              |
 
 region A - https://github.com/kirthiksubbiah/ecommerce-system.git
+
 region B - https://github.com/kirthiksubbiah/ecommerce-system-terraform-.git
+
 ---
 
 ## 🔧 Tools Used

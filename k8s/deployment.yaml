@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecommerce
+  template:
+    metadata:
+      labels:
+        app: ecommerce
+    spec:
+      containers:
+      - name: ecommerce
+        image: 026090546401.dkr.ecr.us-east-1.amazonaws.com/ecommerce-flask:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: SQLALCHEMY_DATABASE_URI
+          value: "mysql+pymysql://admin:admin123@database-1.c38cueauyeoe.us-east-1.rds.amazonaws.com/ecommerce"
